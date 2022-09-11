@@ -13,8 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           npm install
-      - run: |
-          npm run all
+
   testWithCommit:
     runs-on: ubuntu-latest
     steps:
