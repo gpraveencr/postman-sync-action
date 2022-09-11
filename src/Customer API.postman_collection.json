@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "Read a spacecraft 3",
+			"name": "Read a spacecraft",
 			"request": {
 				"method": "GET",
 				"header": [
