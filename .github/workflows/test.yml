@@ -1,0 +1,26 @@
+name: 'build-test'
+on: # rebuild any PRs and main branch changes
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'releases/*'
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          npm ci
+      - run: |
+          npm run all
+  testWithCommit: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          postman_api_ky: ${{ secrets.postmanApiKey }}
+          postman_target_workspace_id: 0f41daa6-c9a7-49d9-8455-707e2f46da22
+          postman_timeout: 30000
