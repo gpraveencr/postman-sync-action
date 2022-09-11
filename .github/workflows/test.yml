@@ -21,6 +21,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          postman_api_ky: ${{ secrets.postmanApiKey }}
-          postman_target_workspace_id: 0f41daa6-c9a7-49d9-8455-707e2f46da22
+          postman_api_key: ${{ secrets.postmanApiKey }}
+          postman_target_workspace_id: 87bf7eea-3c86-4e3c-8888-0e7901d31727
           postman_timeout: 30000
