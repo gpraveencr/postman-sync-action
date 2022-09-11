@@ -32,12 +32,14 @@ const localPostmanCollectionFileMap = new Map();
 const remotePostmanCollectionsMap = new Map();
 const restClient = axios_1.default.create({
     baseURL: 'https://api.getpostman.com',
-    timeout: Number(core.getInput('postmanTimeout')) || 15000,
+    timeout: Number(core.getInput('postman_timeout')) || 15000,
     headers: {
-        'X-Api-Key': 'PMAK-631409b508515e302283b6db-a2c639ad86ff751396fce876972744d357'
+        'X-Api-Key': core.getInput('postman_api_key')
     }
 });
-const postmanWorkspaceId = '87bf7eea-3c86-4e3c-8888-0e7901d31727';
+core.info(`${core.getInput('postman_api_key')} core.getInput('postman_api_key')`);
+core.info(`${core.getInput('postman_target_workspace_id')} core.getInput('postman_target_workspace_id')`);
+const postmanWorkspaceId = core.getInput('postman_target_workspace_id');
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
