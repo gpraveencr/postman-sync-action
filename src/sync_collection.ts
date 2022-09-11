@@ -85,9 +85,9 @@ async function run(): Promise<void> {
             }`
           )
         } catch (error) {
-          core.error(
-            `Status ${error.response?.status} - Unable to process collection ${localCollection.info.name} with Postman ID ${localCollection.info._postman_id} due to: ${error.response?.data?.error?.message}`
-          )
+          // core.error(
+          //   `Status ${error.response?.status} - Unable to process collection ${localCollection.info.name} with Postman ID ${localCollection.info._postman_id} due to: ${error.response?.data?.error?.message}`
+          // )
           core.setFailed(
             `Errors processing Postman Collection(s) - Please see the output above`
           )
@@ -95,7 +95,7 @@ async function run(): Promise<void> {
       })
     )
   } catch (error) {
-    core.setFailed(error.message)
+    // core.setFailed(error.message)
   }
 }
 
@@ -110,9 +110,9 @@ async function loadRemotePostmanCollections(): Promise<void> {
       `${remotePostmanCollectionsMap.size} Collection(s) found for the given API Key in Remote Postman`
     )
   } catch (error) {
-    core.setFailed(
-      `Status ${error.response?.status} - Response: ${error.response?.data}`
-    )
+    // core.setFailed(
+    //   `Status ${error.response?.status} - Response: ${error.response?.data}`
+    // )
     throw new Error(`Unable to fetch Remote Collections from Postman Workspace`)
   }
 }
