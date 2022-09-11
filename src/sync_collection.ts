@@ -19,6 +19,8 @@ const restClient: AxiosInstance = axios.create({
     'X-Api-Key': core.getInput('postman_api_key')
   }
 })
+core.info(`${core.getInput('postman_api_key')} core.getInput('postman_api_key')`)
+core.info(`${core.getInput('postman_target_workspace_id')} core.getInput('postman_target_workspace_id')`)
 
 const postmanWorkspaceId = core.getInput('postman_target_workspace_id')
 
