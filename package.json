@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "Postman Sync Action to push postman collections from GitHub Repo to a specific Postman Workspace",
-  "main": "lib/main.js",
+  "main": "lib/sync_collection.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jneate/postman-collection-action.git"
+    "url": "git+https://github.com/gpraveencr/postman-sync-action.git"
   },
   "keywords": [
     "actions",
