@@ -56,32 +56,26 @@ function run() {
                 try {
                     const remoteCollection = remotePostmanCollectionsMap.get(localCollection.info.name);
                     let response;
-                    if (!remoteCollection) {
-                        // Collection not found in Remote Workspace so send a POST Request to create the collection
-                        const createURi = postmanWorkspaceId
-                            ? `/collections?workspace=${postmanWorkspaceId}`
-                            : `/collections`;
-                        response = yield restClient.post(createURi, {
-                            collection: localCollection
-                        });
-                        if (localCollection.info._postman_id !== response.data.collection.id) {
-                            // IDs are different, update local file
-                            const oldId = localCollection.info._postman_id;
-                            const localPath = localPostmanCollectionFileMap.get(oldId);
-                            if (localPath) {
-                                localCollection.info._postman_id = response.data.collection.id;
-                                yield fs_1.promises.writeFile(localPath, JSON.stringify(localCollection, null, '\t'));
-                            }
+                    if (remoteCollection) {
+                        core.info(`Deleting /collections/${remoteCollection.uid} to later create update to newer version`);
+                        response = yield restClient.delete(`/collections/${remoteCollection.uid}`);
+                    }
+                    const createURi = postmanWorkspaceId
+                        ? `/collections?workspace=${postmanWorkspaceId}`
+                        : `/collections`;
+                    response = yield restClient.post(createURi, {
+                        collection: localCollection
+                    });
+                    if (localCollection.info._postman_id !== response.data.collection.id) {
+                        // IDs are different, update local file
+                        const oldId = localCollection.info._postman_id;
+                        const localPath = localPostmanCollectionFileMap.get(oldId);
+                        if (localPath) {
+                            localCollection.info._postman_id = response.data.collection.id;
+                            yield fs_1.promises.writeFile(localPath, JSON.stringify(localCollection, null, '\t'));
                         }
-                        localCollection.info._postman_id = response.data.collection.id;
                     }
-                    else {
-                        // This is the tricky bit, I don't want to compare if collections are different so always trigger the PUT Request
-                        // Consider using the GitHub Action trigger filters to only execute this action when json files change
-                        response = yield restClient.put(`/collections/${remoteCollection.uid}`, {
-                            collection: localCollection
-                        });
-                    }
+                    localCollection.info._postman_id = response.data.collection.id;
                     core.info(`Successfully ${remoteCollection ? 'updated' : 'created'} collection ${(_b = (_a = response.data) === null || _a === void 0 ? void 0 : _a.collection) === null || _b === void 0 ? void 0 : _b.name} with Postman ID ${(_d = (_c = response.data) === null || _c === void 0 ? void 0 : _c.collection) === null || _d === void 0 ? void 0 : _d.id}`);
                 }
                 catch (error) {
@@ -138,13 +132,13 @@ function loadLocalPostmanCollections() {
         }
         // Wait for all files to be processed before progressing
         yield Promise.all(files.map((file) => __awaiter(this, void 0, void 0, function* () {
-            var _d;
+            var _d, _e;
             // Read the file content in memory and convert to JSON
             try {
                 const jsonContent = JSON.parse((yield fs_1.promises.readFile(file)).toString());
                 // Check if the JSON file is a "valid" Postman v2.1 Collection, when true store in array
-                if (((_d = jsonContent === null || jsonContent === void 0 ? void 0 : jsonContent.info) === null || _d === void 0 ? void 0 : _d.schema) ===
-                    `https://schema.getpostman.com/json/collection/v2.1.0/collection.json`) {
+                if ((((_d = jsonContent === null || jsonContent === void 0 ? void 0 : jsonContent.info) === null || _d === void 0 ? void 0 : _d.schema) === `https://schema.getpostman.com/json/collection/v2.1.0/collection.json`) ||
+                    (((_e = jsonContent === null || jsonContent === void 0 ? void 0 : jsonContent.info) === null || _e === void 0 ? void 0 : _e.schema) === `https://schema.getpostman.com/json/collection/v2.0.0/collection.json`)) {
                     localPostmanCollections.push(jsonContent);
                     localPostmanCollectionFileMap.set(jsonContent.info.name, file);
                 }
